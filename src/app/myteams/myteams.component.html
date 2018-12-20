@@ -1,0 +1,397 @@
+<div id="myteams" class="myteams tour-area">
+<div class="container-fluid">
+	<div class="row">
+		
+		<div *ngIf="teamsByCategory.length == 0; else hasTeams">
+			There are no teams associated to your account
+		</div>
+
+		<ng-template #hasTeams>
+			<div *ngIf="selectedTeam" class="col-sm-9">
+				<div class="card">
+					<div class="card-header">{{selectedTeam.name}}</div>
+					<div class="card-body">
+
+					<!-- Team identification -->
+						<div class="card w-100">
+							<div class="card-body">
+								<h5 class="card-title">Team Identification</h5>
+								<div class="form-row">
+									<div class="form-group col-md-3">
+									
+										<select class="custom-select" id="teamCategory" name="teamCategory" [(ngModel)]="teamCategory" 
+															(ngModelChange)="categoryChanged($event)" [ngClass]="{'invalid-input': validCategory == false}" (change)="onKey('teamCategory')">
+											<option value="0" selected>Select category</option>
+											<option *ngFor="let category of categories" [value]="category.id" 
+												[disabled]="category.teams && category.maxNumberOfTeams > 0 && category.teams.length >= category.maxNumberOfTeams + category.waitListMaxSize">
+												{{category.description}}
+											</option>
+										</select>
+										<div *ngIf="validCategory == false" class="invalid-error"> 
+											{{categoryErrorMessage}}
+										</div>
+									</div>
+									<div class="form-group col-md-4">
+										<input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0" id="teamName" name="teamName" [(ngModel)]="teamName" 
+											placeholder="Team Name" required maxlength="50" [ngClass]="{'invalid-input': validName == false}" (keyup)="onKey('teamName')">
+										<div *ngIf="validName == false" class="invalid-error"> 
+											{{teamNameErrorMessage}}
+										</div>
+									</div>
+									<div class="form-group col-md-5">
+										<input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0" id="teamComments" name="teamComments" [(ngModel)]="teamComments" placeholder="Comments" maxlength="50">
+									</div>								
+								</div>
+								
+								
+								<div class="form-row">	
+									<!-- Home uniform -->
+									<div class="form-group col-1">
+										<div class="form-row"></div>
+										<div class="form-row"><b>Home Uniform</b></div>
+										<div class="form-row">
+											<div class="uniform-m home-uniform">
+												<div class="shirt">
+													<div class="shirt-stripe1" [ngStyle]="{'background':homeJerseyColor}"></div>
+													<div class="shirt-stripe2" [ngStyle]="{'background':homeAlternateColor()}"></div>
+													<div class="shirt-stripe3" [ngStyle]="{'background':homeJerseyColor}"></div>
+													<div class="shirt-stripe4" [ngStyle]="{'background':homeAlternateColor()}"></div>
+													<div class="shirt-stripe3" [ngStyle]="{'background':homeJerseyColor}"></div>
+													<div class="shirt-stripe2" [ngStyle]="{'background':homeAlternateColor()}"></div>
+													<div class="shirt-stripe1" [ngStyle]="{'background':homeJerseyColor}"></div>
+													<img class="uniform-img" src="img/shirt-m.png">
+												</div>
+												<div class="shorts">
+													<img class="uniform-img" src="img/short-m.png" [ngStyle]="{'background':homeShortsColor}">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="form-row" style="padding:4px;">
+											<div class="color-select">
+												<label class="form-check-label"  for="homeJerseyColor">Jersey:</label>											
+												<select name="homeJerseyColor" id="homeJerseyColor" [(ngModel)]="homeJerseyColor"
+												class="form-control dropdown-menu-right primary-color uniform-color-picker"
+												[style.background-color]="homeJerseyColor">
+													<option value="">Select color</option>
+													<option [ngStyle]="{'background':color.code}" *ngFor="let color of colors" [value]="color.code">{{color.name}}</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-row" style="padding:4px;">
+											<div class="color-select">
+												<label class="form-check-label" for="homeJerseyStripColor">Strips:</label>
+												<select name="homeJerseyStripColor" id="homeJerseyStripColor" [(ngModel)]="homeJerseyStripColor" 
+												class="form-control dropdown-menu-right primary-color uniform-color-picker"
+												[style.background-color]="homeJerseyStripColor">
+													<option value="">No strip</option>
+													<option [ngStyle]="{'background':color.code}" *ngFor="let color of colors" [value]="color.code">{{color.name}}</option>
+												</select>
+											</div>
+										</div>									
+										<div class="form-row" style="padding:4px;">
+											<div class="color-select">
+												<label class="form-check-label"  for="homeShortsColor">Shorts:</label>
+												<select name="homeShortsColor" id="homeShortsColor" [(ngModel)]="homeShortsColor" 
+													class="form-control dropdown-menu-right primary-color uniform-color-picker"
+													[style.background-color]="homeShortsColor">
+													<option value="">Select color</option>
+													<option [ngStyle]="{'background':color.code}" *ngFor="let color of colors" [value]="color.code">{{color.name}}</option>
+												</select>
+											</div>
+										</div>
+									</div>		
+								
+									<div class="form-group col-1">
+
+									</div>
+																
+									<!-- End home uniform -->
+
+									<!-- Away uniform -->
+									<div class="form-group col-1">
+										<div class="form-row"></div>
+										<div class="form-row"><b>Away Uniform</b></div>
+										<div class="form-row">
+											<div class="uniform-m away-uniform">
+												<div class="shirt">
+													<div class="shirt-stripe1" [ngStyle]="{'background':awayJerseyColor}"></div>
+													<div class="shirt-stripe2" [ngStyle]="{'background':awayAlternateColor()}"></div>
+													<div class="shirt-stripe3" [ngStyle]="{'background':awayJerseyColor}"></div>
+													<div class="shirt-stripe4" [ngStyle]="{'background':awayAlternateColor()}"></div>
+													<div class="shirt-stripe3" [ngStyle]="{'background':awayJerseyColor}"></div>
+													<div class="shirt-stripe2" [ngStyle]="{'background':awayAlternateColor()}"></div>
+													<div class="shirt-stripe1" [ngStyle]="{'background':awayJerseyColor}"></div>
+													<img class="uniform-img" src="img/shirt-m.png">
+												</div>
+												<div class="shorts">
+													<img class="uniform-img" src="img/short-m.png" [ngStyle]="{'background':awayShortsColor}">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="form-row" style="padding:4px;">
+											<div class="color-select">
+												<label class="form-check-label"  for="awayJerseyColor">Jersey:</label>
+												<select name="awayJerseyColor" id="awayJerseyColor" [(ngModel)]="awayJerseyColor" 
+													class="form-control dropdown-menu-right primary-color uniform-color-picker"
+													[style.background-color]="awayJerseyColor">
+													<option value="">Select color</option>
+													<option [ngStyle]="{'background':color.code}" *ngFor="let color of colors" [value]="color.code">{{color.name}}</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-row" style="padding:4px;">
+											<div class="color-select">
+												<label class="form-check-label" for="awayJerseyStripColor">Strips:</label>
+												<select name="awayJerseyStripColor" id="awayJerseyStripColor" [(ngModel)]="awayJerseyStripColor" 
+													class="form-control dropdown-menu-right primary-color uniform-color-picker"
+													[style.background-color]="awayJerseyStripColor">
+													<option value="">No Strip</option>
+													<option [ngStyle]="{'background':color.code}" *ngFor="let color of colors" [value]="color.code">{{color.name}}</option>
+												</select>
+											</div>
+										</div>									
+										<div class="form-row" style="padding:4px;">
+											<div class="color-select">
+												<label class="form-check-label"  for="awayShortsColor">Shorts:</label>
+												<select name="awayShortsColor" id="awayShortsColor" [(ngModel)]="awayShortsColor" 
+													class="form-control dropdown-menu-right primary-color uniform-color-picker"
+													[style.background-color]="awayShortsColor">
+													<option value="">Select color</option>
+													<option [ngStyle]="{'background':color.code}" *ngFor="let color of colors" [value]="color.code">{{color.name}}</option>
+												</select>
+											</div>
+										</div>
+									</div>						
+									<div class="form-group col-1">
+									</div>									
+									<!-- End away uniform -->								
+								</div>															
+							</div>
+						</div>
+						<!-- End team identification -->
+						
+						<!-- Contact information -->
+						<div class="card w-100">
+							<div class="card-body">
+								<h5 class="card-title">Contact Information</h5>
+								<div class="container">
+									<table class="table table-hover table-sm">
+										<thead class="thead-light">
+										<tr>
+											<th>Email</th>
+											<th colspan="3">Last Name</th>
+											<th colspan="3">First Name</th>
+											<th>Role</th>
+											<th>Actions</th>
+										</tr>
+										</thead>
+										<tbody>
+											<tr>	
+												<td>{{teamOwner.email}}</td>
+												<td colspan="3">{{teamOwner.lastName}}</td>
+												<td colspan="3">{{teamOwner.firstName}}</td>
+												<td>
+													<div class="form-group">
+														<div class="form-check form-check-inline">
+															<input type="radio" id="ownerCoach" name="ownerCoach" value="coach" [(ngModel)]="teamOwnerRole" 
+																	class="form-check-input" (change)="onKey('ownerRole')">
+															<label class="form-check-label" for="ownerCoach" [ngClass]="{'invalid-input': validOwnerRole == false}">Coach</label>															
+														</div>
+														<div class="form-check form-check-inline">
+															<input type="radio" id="ownerAdmin" name="ownerAdmin" value="manager" [(ngModel)]="teamOwnerRole" 
+																	class="form-check-input" (change)="onKey('ownerRole')">
+															<label class="form-check-label" for="ownerAdmin" [ngClass]="{'invalid-input': validOwnerRole == false}">Manager</label>
+														</div>
+													</div>
+													<div *ngIf="validOwnerRole == false" class="invalid-error"> 
+														{{ownerRoleErrorMessage}}
+													</div>													
+												</td>
+												<td>
+												</td>
+											</tr>
+
+											<tr>	
+												<td>
+													<div class="form-group">
+														<input type="text" class="form-control form-control-sm editableCell" id="contactEmail" name="contactEmail" 
+															[(ngModel)]="teamContact.email" [ngClass]="{'invalid-input': validContactEmail == false}" (keyup)="onKey('contactEmail')" (change)="onContactEmail()"
+															[readonly]="selfContact()">
+														<div *ngIf="validContactEmail == false" class="invalid-error"> 
+															{{contactEmailMessage}}
+														</div>
+													</div>	
+												</td>
+												<td colspan="3">
+													<div class="form-group">
+														<input type="text" class="form-control form-control-sm editableCell" id="contactLastName" name="contactLastName" 
+															[(ngModel)]="teamContact.lastName" [ngClass]="{'invalid-input': validContactLastName == false}" (keyup)="onKey('contactLastName')"
+															[readonly]="selfContact() || contactAccountFound == true">
+														<div *ngIf="validContactLastName == false" class="invalid-error"> 
+															{{contactLastNameMessage}}
+														</div>															
+													</div>	
+												</td>
+												<td colspan="3">
+													<div class="form-group">
+														<input type="text" class="form-control form-control-sm editableCell" id="contactFirsttName" name="contactFirsttName" 
+															[(ngModel)]="teamContact.firstName" [ngClass]="{'invalid-input': validContactFirstName == false}" (keyup)="onKey('contactFirstName')"
+															[readonly]="selfContact() || contactAccountFound == true">
+														<div *ngIf="validContactFirstName == false" class="invalid-error"> 
+															{{contactFirstNameMessage}}
+														</div>																
+													</div>	
+												</td>
+												<td>
+													<div class="form-group">
+														<div class="form-check form-check-inline">
+															<input type="radio" id="contactCoach" name="contactCoach" value="coach" 
+																[(ngModel)]="teamContactRole" class="form-check-input" (change)="onKey('contactRole')">
+															<label class="form-check-label" for="contactCoach" [ngClass]="{'invalid-input': validContactRole == false}">Coach</label>
+														</div>
+														<div class="form-check form-check-inline">
+															<input type="radio" id="contactAdmin" name="contactAdmin" value="manager" 
+																[(ngModel)]="teamContactRole" class="form-check-input" (change)="onKey('contactRole')">
+															<label class="form-check-label" for="contactAdmin" [ngClass]="{'invalid-input': validContactRole == false}">Manager</label>
+														</div>
+													</div>
+													<div *ngIf="validContactRole == false" class="invalid-error"> 
+														{{contactRoleMessage}}
+													</div>													
+												</td>
+												<td>
+													<a *ngIf="!selfContact()" (click)="onClearContact()" class="delete pointer" title="Clear" data-toggle="tooltip"><i style="color:#f30404" class="fa fa-fw fa-eraser"></i></a>												
+												</td>
+											</tr>										
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<!-- End  contact information -->					
+
+						<!-- Players -->
+						<div class="card w-100">
+							<div class="card-body">
+								<h5 class="card-title">Players</h5>
+								<div class="container">
+
+
+									<table class="table table-hover table-sm">
+										<thead class="thead-light">
+										<tr>
+											<th>Jersey Number</th>
+											<th colspan="3">Last Name</th>
+											<th colspan="3">First Name</th>
+											<th colspan="2">OSA Number</th>
+											<th colspan="2">Year of Birth</th>
+											<th>Actions</th>
+										</tr>
+										</thead>
+										<tbody>
+											<tr *ngFor="let player of teamPlayers; index as i">	
+												<td>
+													<input [(ngModel)]="teamPlayers[i].jerseyNumber" type="text" class="form-control form-control-sm editableCell" id="jersey{{i}}" name="jersey{{i}}" maxlength="3"
+															[ngClass]="{'invalid-input': validPlayerNumber[i] == false}" (keyup)="onPlayerKey('number',i)" OnlyNumber="true">
+													<div *ngIf="validPlayerNumber[i] == false" class="invalid-error"> 
+														{{playerNumberErrorMessage[i]}}
+													</div>
+												</td>
+												<td colspan="3">
+													<input [(ngModel)]="teamPlayers[i].lastName" type="text" class="form-control form-control-sm editableCell" id="lastName{{i}}" name="lastName{{i}}" maxlength="50"
+															[ngClass]="{'invalid-input': validPlayerLastName[i] == false}" (keyup)="onPlayerKey('lastName',i)">
+													<div *ngIf="validPlayerLastName[i] == false" class="invalid-error"> 
+														{{playerLastNameErrorMessage}}
+													</div>															
+												</td>
+												<td colspan="3">
+													<input [(ngModel)]="teamPlayers[i].firstName"type="text" class="form-control form-control-sm editableCell" id="firstName{{i}}" name="firstName{{i}}" maxlength="50"
+															[ngClass]="{'invalid-input': validPlayerFirstName[i] == false}" (keyup)="onPlayerKey('firstName',i)">
+													<div *ngIf="validPlayerFirstName[i] == false" class="invalid-error"> 
+														{{playerFirstNameErrorMessage}}
+													</div>		
+												</td>
+												<td colspan="2">
+													<input [(ngModel)]="teamPlayers[i].identification" type="text" class="form-control form-control-sm editableCell" id="osa{{i}}" name="osa{{i}}" maxlength="20"
+															[ngClass]="{'invalid-input': validPlayerIdentification[i] == false}" (keyup)="onPlayerKey('identification',i)">
+													<div *ngIf="validPlayerIdentification[i] == false" class="invalid-error"> 
+														{{playerIdentificationErrorMessage[i]}}
+													</div>		
+												</td>
+												<td colspan="2">
+													<input [(ngModel)]="teamPlayers[i].yearOfBirth" type="text" class="form-control form-control-sm editableCell yob" id="yob{{i}}" name="yob{{i}}" maxlength="4"
+															[ngClass]="{'invalid-input': validPlayerYearOfBirth[i] == false}" (keyup)="onPlayerKey('yearOfBirth',i)" OnlyNumber="true">
+													<div *ngIf="validPlayerYearOfBirth[i] == false" class="invalid-error"> 
+														{{playerYearOfBirthErrorMessage}}
+													</div>	
+												</td>
+												<td>
+													<a (click)="onClearPlayer(i)" class="delete pointer" title="Clear" data-toggle="tooltip"><i style="color:#f30404" class="fa fa-fw fa-eraser"></i></a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								
+								
+								</div>
+							</div>	
+						</div>
+						<!-- End Players -->					
+						
+						<!-- buttons -->
+						<div class="card w-100">
+							<div class="card-body">
+								<div class="form-row">
+									<div class="col-md-2"></div>
+									<div class="col-md-6">
+										<button (click)="onSubmit()" type="button" class="btn btn-info btn-block">Submit</button>
+									</div>
+									<div class="col-md-2">
+										<button (click)="onDelete()" type="button" class="btn btn-danger btn-block">Delete</button>
+									</div>
+									<div class="col-md-2"></div>
+								</div>						
+							</div>
+						</div>
+						<!-- End buttons -->
+					</div>
+				</div>
+			</div>
+		</ng-template>
+		<!-- My teams -->
+		<div class="col-sm-3">				
+			<div class="card w-100">
+				<div class="card">
+					<div class="card-header">My Teams</div>
+					<div class="card-body">
+						<div class="container-fluid">
+							<button (click)="onAddTeam()" type="button" class="btn btn-info add-new" [disabled]="!beforeDeadline()" ><i class="fa fa-plus"></i> Add Team</button>
+							<p></p>
+							
+							<table *ngFor="let category of teamsByCategory" class="table table-striped">
+								<thead>
+									<tr>
+										<th>{{category.code}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let team of category.teams">
+										<td style="padding:0;"> <button (click)="onTeamSelection(team.id)" class="btn btn-link btn-block">{{team.name}}</button></td>
+									</tr>
+								</tbody>
+							</table>
+
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
+		
+	</div>
+</div>
+</div> <!-- myteams -->	

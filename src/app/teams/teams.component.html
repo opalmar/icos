@@ -1,0 +1,89 @@
+<div id="teams" class="teams tour-area">
+
+	<div class="container">
+		<br>
+	  <table class="table table-hover table-sm">
+
+		<tbody>
+		  <tr>
+
+			  <div class="form-row">
+				<div class="col-3">
+							
+				
+					<select class="custom-select" id="category" name="category" [(ngModel)]="category" 
+										(ngModelChange)="categoryChanged($event)">
+						<option value="0" selected>All categories</option>
+						<option *ngFor="let category of categories" [value]="category.id">
+							{{category.description}}
+						</option>
+					</select>				
+
+
+				</div>
+				<div class="col-2 form-group">
+					<button (click)="onRefresh()" class="btn btn-primary">Refresh</button>
+				</div>					
+				<div class="col-4"></div>
+				<div class="col-3">
+					<!--
+				  <label for="find" class="col-form-label">Highlight</label>
+				  <input type="text" name="find" class="form-control" >
+				   -->
+				</div>
+			  </div>
+
+		  </tr>
+
+		</tbody>
+	  </table>
+	</div>
+
+
+	<div class="container">
+		<div  *ngFor="let category of categories">
+			<h5>{{category.code}}</h5>
+			<table class="table table-hover table-sm">
+				<thead class="thead-light">
+				  <tr>
+					<th></th>
+					<th colspan="7">Team Name</th>
+					<th colspan="4">Status</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr *ngFor="let team of category.teams">
+					<td>
+						<div class="uniform-xs">
+							<div class="shirt">							
+								<div class="shirt-stripe1" [ngStyle]="{'background':team.homeJerseyColor}"></div>
+								<div class="shirt-stripe2" [ngStyle]="{'background':team.homeStripColor}"></div>
+								<div class="shirt-stripe3" [ngStyle]="{'background':team.homeJerseyColor}"></div>
+								<div class="shirt-stripe4" [ngStyle]="{'background':team.homeStripColor}"></div>
+								<div class="shirt-stripe3" [ngStyle]="{'background':team.homeJerseyColor}"></div>
+								<div class="shirt-stripe2" [ngStyle]="{'background':team.homeStripColor}"></div>
+								<div class="shirt-stripe1" [ngStyle]="{'background':team.homeJerseyColor}"></div>							
+								<img class="uniform-img"src="img/shirt-xs.png">
+							</div>
+							<div class="shorts" style="background-color:red;">
+								<img class="uniform-img" src="img/short-xs.png" [ngStyle]="{'background':team.homeShortsColor}">
+							</div>
+						</div>
+					</td>
+					<td colspan="7">{{team.name}}</td>
+					<td colspan="2">{{team.teamStatus}}</td> 
+					<td colspan="2">
+						<div class="progress">
+							<div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</td>
+				  </tr>
+
+				  
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+
+</div> <!-- teams -->

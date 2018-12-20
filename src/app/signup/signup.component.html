@@ -1,0 +1,164 @@
+<script src='https://www.google.com/recaptcha/api.js'></script>
+			
+<form  *ngIf="isUserLoggedIn() == false" id="signup" class="signup tour-area signup-form">
+    <div class="formcontainer">
+        <h2 class="text-center">Sign up</h2>       
+        <div class="form-group">
+            <input [(ngModel)]="email" name="email" type="email" class="form-control" placeholder="Email" required maxlength="100" [ngClass]="{'invalid-input': validEmail == false}" (keyup)="onKey('email')" (change)="emailChanged()" [readonly]="awaitingActivationCode == true">
+			<div *ngIf="validEmail == false && emailAlreadyActivated == false" class="invalid-error"> 
+			    {{emailErrorMessage}}
+		    </div>
+			<div *ngIf="validEmail == false && emailAlreadyActivated == true" class="invalid-error"> 
+			    You already have an account, please try to <a routerLink="/login">login</a> instead
+		    </div>			
+        </div>
+		<div *ngIf="enterAccountName == true" class="row form-group">
+			<div class="col-md-6">
+				<input [(ngModel)]="firstName" name="firstName" type="text" pattern="[a-zA-Z ]*" class="form-control" placeholder="First Name" required maxlength="20" [ngClass]="{'invalid-input': validFirstName == false}" (keyup)="onKey('firstName')">
+				<div *ngIf="validFirstName == false" class="invalid-error"> 
+					{{firstNameErrorMessage}}
+				</div>
+			</div>
+			<div class="col-md-6">
+				<input [(ngModel)]="lastName" name="lastName" type="text" pattern="[a-zA-Z ]*" class="form-control" placeholder="Last Name" required maxlength="30" [ngClass]="{'invalid-input': validLastName == false}" (keyup)="onKey('lastName')">
+				<div *ngIf="validLastName == false" class="col-md-6" class="invalid-error"> 
+					{{lastNameErrorMessage}}
+				</div>	
+			</div>
+
+		</div>
+
+		<div  *ngIf="enterAccountAddress == true" class="form-group">
+			<input [(ngModel)]="address" name="address" type="text" class="form-control" placeholder="Address" required maxlength="80" [ngClass]="{'invalid-input': validAddress == false}" (keyup)="onKey('address')">
+			<div *ngIf="validAddress == false" class="invalid-error"> 
+				{{addressErrorMessage}}
+			</div>
+		</div>
+
+		 <div *ngIf="enterAccountAddress == true" class="row form-group">   
+			<div class="col-md-4"> 
+				<input [(ngModel)]="city" name="city" type="text" pattern="[a-zA-Z ]*" class="form-control" placeholder="City" required maxlength="30" [ngClass]="{'invalid-input': validCity == false}" (keyup)="onKey('city')">
+				<div *ngIf="validCity == false" class="invalid-error"> 
+					{{cityErrorMessage}}
+				</div>
+			</div>
+			<div class="col-md-4">
+			    <select name="provinceStateSelect"  id="provinceStateSelect" class="form-control" [ngClass]="{'invalid-input': validProvinceState == false}" >
+					<option [ngValue]="provinceState" *ngFor="let provinceEntry of provinces">{{provinceEntry.value}}</option>
+				</select>
+				<div *ngIf="validProvinceState == false" class="invalid-error"> 
+					Select province
+				</div>
+			</div>
+			<div class="col-md-4"> 
+				<input [(ngModel)]="postalCode" name="postalCode" type="text" class="form-control" placeholder="Postal code" required maxlength="7" [ngClass]="{'invalid-input': validPostalCode == false}" (keyup)="onKey('postalCode')">
+				<div *ngIf="validPostalCode == false" class="invalid-error"> 
+					{{postalCodeErrorMessage}}
+				</div>			
+			</div> 
+        </div>
+		<div *ngIf="enterAccountPhone == true" class="form-group">
+			<input [(ngModel)]="phone" name="phone" type="text" class="form-control" placeholder="Phone Number" required maxlength="30" [ngClass]="{'invalid-input': validPhone == false}" (keyup)="onKey('phone')">
+			<div *ngIf="validPhone == false" class="invalid-error"> 
+				{{phoneErrorMessage}}
+			</div>			
+		</div>			
+				
+        <div *ngIf="enterAffiliation == true" class="form-group">
+			<ng-select placeholder="Club affiliation" name="affiliation" [(ngModel)]="affiliation" (focus)="focusInAffiliation($event)" (focusout)="focusOffAffiliation($event)"  (search)="searchAffiliation($event)" (change)="onAffiliationChange($event)" [ngClass]="{'invalid-input': validAffiliation == false}"> 
+				<ng-option *ngFor="let affiliationEntry of affiliations" [value]="affiliationEntry.id">{{affiliationEntry.name}}</ng-option>
+			</ng-select>
+			<div *ngIf="validAffiliation == false" class="invalid-error"> 
+				Select affiliation
+			</div>		
+		</div>
+
+		<div class="form-check">
+			<input class="form-check-input" type="checkbox" value="Y" id="acceptCheck"  (change)="acceptTerms($event)">
+			<label class="form-check-label conditions" for="defaultCheck1">
+				Check here to  indicate that you have read and agree to the 
+				<a href="{{termsAndConditionsURL}}" target="blank">terms and conditions</a>
+			</label>
+		</div>		
+		
+		<div id="register" class="register tour-area">
+			<ngx-recaptcha2 (success)="resolved($event)" siteKey="6LeDWHAUAAAAABXO6hcwqYUx6Yu871mS-9Nz9apH"></ngx-recaptcha2>
+			<div *ngIf="validRecaptcha == false" class="invalid-error"> 
+				{{recaptchaErrorMessage}}
+			</div>	
+		</div>	
+
+		<div class="form-group" *ngIf="activationStatus.statusCode == 0 || activationStatus.statusCode == 1 || activationStatus.statusCode == 2">
+			<p class="small" [ngClass]="{'response-error': activationStatus.statusCode == '1',
+								'response-warning': activationStatus.statusCode == '2', 
+								'response-success': activationStatus.statusCode == '0' }">
+								
+				<i class="fa" [ngClass]="{'fa-close response-error': activationStatus.statusCode == '1',
+							'fa-exclamation-triangle response-warning': activationStatus.statusCode == '2', 
+							'fa-check response-success': activationStatus.statusCode == '0' }"></i>							
+			{{requestActivationFeedbackMessage}}
+			</p>
+		</div>
+
+		<div class="form-group">
+			<button (click)="onRequestActivationCode()" class="btn btn-primary btn-block" [disabled]="validEmail == false || awaitingActivationCode == true || acceptConditions == false">Request Activation Code</button>
+		</div>
+		<div *ngIf="activationCodeRequested() === true">
+			{{activationCodeStatus}}
+			<p class="small">To continue, enter your activation code and password (wait a moment and check your email if the activation code is not in your inbox yet)</p>
+			<div class="row form-group">
+				<div class="col-md-6 form-group">
+					<input [(ngModel)]="activationCode" name="activationCode" type="text" class="form-control" placeholder="Enter your activation code" required="required" maxlength="30">
+					<div *ngIf="validActivationCode == false" class="invalid-error"> 
+						{{activationCodeErrorMessage}}
+					</div>	
+				</div>
+				<div class="col-md-1 form-group">
+					Or
+				</div>
+				<div class="col-md-5 form-group">
+					<button (click)="onRequestNewActivationCode()" class="btn btn-block" [ngClass]="{'btn-info' : activationCodeAttempts < 4,
+																										'btn-danger' : activationCodeAttempts >= 4}">{{newActivationCodeMessage}}</button>
+				</div>
+			</div>
+			
+			<div class="row form-group">
+				<div class="col-md-5 form-group"> 
+						<input [(ngModel)]="passwd" name="passwd" type="password" class="form-control" placeholder="New password" required="required" maxlength="30">			
+						<div *ngIf="validPasswd == false" class="invalid-error"> 
+							{{passwdErrorMessage}}
+						</div>					
+				</div>
+				<div class="col-md-0"> 
+					<i class="fa" [ngClass]="{'fa-close response-error': isPasswordAcceptable() == false,
+					'fa-check response-success': isPasswordAcceptable() == true }"></i>	
+				</div>				
+				<div class="col-md-6" style="font-size : 12px;"> 
+					Length must be minimum 8 characters and contain at least one uppercase letter, one lowercase letter,one digit and a special character($@$!%*#?&)
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-5 form-group"> 
+					<input [(ngModel)]="confirmPasswd" name="confirmPasswd" type="password" class="form-control" placeholder="Retype new password" required="required" maxlength="30">
+					<div *ngIf="validConfirmPasswd == false" class="invalid-error"> 
+						{{validConfirmPasswdErrorMessage}}
+					</div>	
+				</div>	
+				<div class="col-md-0">
+					<i class="fa" [ngClass]="{'fa-close response-error': confirmPasswd == '' || isPasswordAcceptable() == false || passwd != confirmPasswd,
+					'fa-check response-success': confirmPasswd != '' && isPasswordAcceptable() == true && passwd === confirmPasswd }"></i>	
+				</div>  
+				<div class="col-md-6" style="font-size : 12px;">
+				</div>
+			</div>          
+			
+			<div class="form-group">
+				<button (click)="onSignUp()" class="btn btn-primary" [disabled]="activationCode == '' || isPasswordAcceptable() == false || !passwd == confirmPasswd">Sign up</button>
+			</div>
+		</div>
+		
+    </div>   
+</form>	
+
+

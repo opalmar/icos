@@ -1,0 +1,62 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+	.signup-form {
+		width: 680px;
+    	margin: 50px auto;
+	}
+    .signup-form .formcontainer {
+    	margin-bottom: 10px;
+        background: #f7f7f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+    }
+    .signup-form h2 {
+        margin: 0 0 15px;
+    }
+    .form-control, .btn {
+        min-height: 8px;
+        border-radius: 2px;
+    }
+    .btn {        
+        font-size: 15px;
+        font-weight: bold;
+    }
+	
+	.container {
+		background: #fdfdfd;
+		text-align: center;
+		padding-top: 150px;
+		padding-bottom: 150px;
+	}
+	
+	.invalid-error {
+		font-size: 12px;
+		color: #e06c6c;
+	}
+	
+	.invalid-input {
+		border: 2px solid #ffa4a4;
+	}
+	
+	.response-error {
+		font-size:16px; 
+		color:#ff0000;
+	}
+	
+	.response-warning {
+		font-size:16px; 
+		color:#ffcc00;
+	}	
+	
+	.response-success {
+		font-size:16px; 
+		color:#00e600;
+	}	
+	
+	.conditions {
+		font-size:13px;
+		color:#606a90;
+	}
+	
+
+	

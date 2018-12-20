@@ -1,0 +1,9 @@
+	<div class="home tour-area-active">
+		<p>Home text goes here</p>
+		<p *ngIf="isUserLoggedin() == false">To register for the tournament please <a routerLink="/signup">create an account</a> or <a routerLink="/login">login</a> if you already have an account</p>
+		<p *ngIf="isUserLoggedin() == true">To enter or update your team(s) roster follow <a href="#">this link</a></p>
+		<p>Follow <a routerLink="/teams">this link</a> to view a list of teams registered for the tournament</p>
+		<p>Click <a routerLink="/fields">here</a> for maps</p>
+		<p>For tournament schedule follow <a routerLink="/schedule">this link</a></p>
+		<p>To check current standings <a routerLink="/standings">click here</a></p>
+    </div> <!-- home -->

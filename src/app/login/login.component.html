@@ -1,0 +1,112 @@
+<div *ngIf="isUserLoggedIn() == true" class="container">
+	<p>You are logged in as {{getLoggedInUserAccount()}} </p>
+	<p>To manage your account click here</p>
+	<p>To manage your teams click here</p>
+	<p>Click here to visit the tournament home page</p>
+	<p>Click here to sign out</p>
+	<p></p>
+</div>
+
+
+<form  *ngIf="isUserLoggedIn() == false" id="login" class="login tour-area login-form">
+    <div class="formcontainer">
+        <h2 class="text-center">Log in</h2>       
+        <div class="form-group">
+			<input [(ngModel)]="email" name="email" type="email" class="form-control" placeholder="Email" required maxlength="100" [ngClass]="{'invalid-input': validEmail == false}" (keyup)="onKey('email')" (change)="emailChanged()" [readonly]="awaitingActivationCode == true">
+			<div *ngIf="validEmail == false" class="invalid-error"> 
+			    {{emailErrorMessage}}
+		    </div>
+        </div>
+        <div *ngIf="isForgotPasswordMode() == false" class="form-group">
+            <input [(ngModel)]="passwd" name="passwd" type="password" class="form-control" placeholder="Password" required>
+			<div *ngIf="validPasswd == false" class="invalid-error"> 
+			    {{passwdErrorMessage}}
+		    </div>
+        </div>
+        <div *ngIf="isForgotPasswordMode() == false" class="form-group">
+            <button (click)="onLogin()" class="btn btn-info btn-block">Log in</button>
+        </div>
+		
+		<div class="form-group" *ngIf="loginStatus > 0">
+			<p class="small" [ngClass]="{'response-error': loginStatus == '1'}">							
+				<i class="fa" [ngClass]="{'fa-close response-error': loginStatus == '1'}"></i>							
+			{{feedbackMessage}}
+			</p>
+		</div>
+		
+        <div class="clearfix">
+            <!--label *ngIf="isForgotPasswordMode() == false" class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label-->
+			 <button (click)="onForgotPassword()" class="btn btn-link btn-block">Forgot Password?</button>
+        </div>        
+    </div>
+	   
+    <div *ngIf="isForgotPasswordMode() == true" class="formcontainer">     
+		<div class="form-group" *ngIf="activationStatus.statusCode == 0 || activationStatus.statusCode == 1 || activationStatus.statusCode == 2">
+			<p class="small" [ngClass]="{'response-error': activationStatus.statusCode == '1',
+								'response-warning': activationStatus.statusCode == '2', 
+								'response-success': activationStatus.statusCode == '0' }">
+								
+				<i class="fa" [ngClass]="{'fa-close response-error': activationStatus.statusCode == '1',
+							'fa-exclamation-triangle response-warning': activationStatus.statusCode == '2', 
+							'fa-check response-success': activationStatus.statusCode == '0' }"></i>							
+			{{requestActivationFeedbackMessage}}
+			</p>
+		</div>	 
+	    <div class="form-group">
+			<button (click)="onRequestNewActivationCode()" [disabled]="!email" class="btn btn-block" [ngClass]="{'btn-primary' : activationCodeAttempts < 4,
+																										'btn-danger' : activationCodeAttempts >= 4}">{{activationCodeButtonText}}</button>
+		</div>	
+
+		<div *ngIf="activationCodeRequested() === true">		
+			<p class="small">To continue, enter your activation code and password (wait a moment and check your email if the activation code is not in your inbox yet)</p>
+			<div class="form-group">
+				<input [(ngModel)]="activationCode" name="activationCode" type="text" class="form-control" placeholder="Enter your activation code" required="required" maxlength="30">
+				<div *ngIf="validActivationCode == false" class="invalid-error"> 
+					{{activationCodeErrorMessage}}
+				</div>	
+			</div>
+			<div class="row form-group">
+				<div class="col-md-5 form-group"> 
+						<input [(ngModel)]="passwd" name="passwd" type="password" class="form-control" placeholder="New password" required="required" maxlength="30">			
+						<div *ngIf="validPasswd == false" class="invalid-error"> 
+							{{passwdErrorMessage}}
+						</div>					
+				</div>
+				<div class="col-md-0"> 
+					<i class="fa" [ngClass]="{'fa-close response-error': isPasswordAcceptable() == false,
+					'fa-check response-success': isPasswordAcceptable() == true }"></i>	
+				</div>				
+				<div class="col-md-6" style="font-size : 12px;"> 
+					Length must be minimum 8 characters and contain at least one uppercase letter, one lowercase letter,one digit and a special character($@$!%*#?&)
+				</div>
+			</div>
+			<div class="row form-group">
+				<div class="col-md-5 form-group"> 
+					<input [(ngModel)]="confirmPasswd" name="confirmPasswd" type="password" class="form-control" placeholder="Retype password" required="required" maxlength="30">
+					<div *ngIf="validConfirmPasswd == false" class="invalid-error"> 
+						{{validConfirmPasswdErrorMessage}}
+					</div>	
+				</div>	
+				<div class="col-md-0">
+					<i class="fa" [ngClass]="{'fa-close response-error': confirmPasswd == '' || isPasswordAcceptable() == false || passwd != confirmPasswd,
+					'fa-check response-success': confirmPasswd != '' && isPasswordAcceptable() == true && passwd === confirmPasswd }"></i>	
+				</div>  
+				<div class="col-md-6" style="font-size : 12px;">
+				</div>
+			</div>  
+				
+			<div class="form-group">
+				<button (click)="onResetPassword()" class="btn btn-block" [disabled]="activationCode == '' || isPasswordAcceptable() == false || !passwd == confirmPasswd" [ngClass]="{'btn-primary' : updatePasswordAttempts < 4,
+																										'btn-danger' : updatePasswordAttempts >= 4}">{{updatePasswordButtonText}}</button>
+				</div>
+			<div class="form-group" *ngIf="changePasswordStatus > 0">
+				<p class="small" [ngClass]="{'response-error': changePasswordStatus == '1'}">							
+					<i class="fa" [ngClass]="{'fa-close response-error': changePasswordStatus == '1'}"></i>							
+				{{feedbackMessage}}
+				</p>
+			</div>     
+		</div>
+	</div>
+	<p class="text-center"><a routerLink="/signup" class="text-danger">Create an Account</a></p>
+    
+</form>

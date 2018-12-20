@@ -1,0 +1,53 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+	.uniform-m {
+		 width: 52px;
+	}
+	
+	.uniform-m .shirt {
+		width: 52px;
+		height: 40px;
+	}
+	
+	.uniform-m .shirt .shirt-stripe1 {
+	  width: 8px;
+	  height: 40px;
+	  float: left;
+	  padding: 0px;
+	}	
+	
+	.uniform-m .shirt .shirt-stripe2 {
+	  width: 7px;
+	  height: 40px;
+	  float: left;
+	  padding: 0px;
+	}
+	
+	.uniform-m .shirt .shirt-stripe3 {
+	  width: 7px;
+	  height: 40px;
+	  float: left;
+	  padding: 0px;
+	}
+	
+	.uniform-m .shirt .shirt-stripe4 {
+	  width: 8px;
+	  height: 40px;
+	  float: left;
+	  padding: 0px;
+	}	
+	
+	.uniform-m .shirt .uniform-img {
+		position: absolute;
+		margin: 0px -52px;
+	}
+	
+	.uniform-m .shorts {
+		width: 52px;
+		height: 20px;	
+	}
+	
+	.uniform-m .shorts .uniform-img {
+		display: block;
+	}	

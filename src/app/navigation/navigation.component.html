@@ -1,0 +1,25 @@
+	<!-- Navigation bar -->
+	<div class="topnav">
+	  <a [ngClass]="{'active':appContext.selectedNavOption === 'home'}" routerLink="/home"><i class="fa fa-fw fa-home"></i> Home</a>
+	  <a [ngClass]="{'active':appContext.selectedNavOption === 'teams'}" routerLink="/teams"><i class="fa fa-fw fa-group"></i> Teams</a>
+	  <a [ngClass]="{'active':appContext.selectedNavOption === 'fields'}" routerLink="/fields"><i class="fa fa-fw fa-globe"></i> Fields</a>
+	  <a [ngClass]="{'active':appContext.selectedNavOption === 'schedule'}" routerLink="/schedule"><i class="fa fa-fw fa-calendar"></i> Schedule</a>
+	  <a [ngClass]="{'active':appContext.selectedNavOption === 'standings'}" routerLink="/standings"><i class="fa fa-fw fa-list-alt"></i> Standings</a>
+	  <a *ngIf="isUserLoggedin() == true" [ngClass]="{'active':appContext.selectedNavOption === 'myteams'}" routerLink="/myteams"><i class="fa fa-fw fa-futbol-o"></i> My Team(s)</a>	  
+	  <a *ngIf="isConvenorUser() == true" [ngClass]="{'active':appContext.selectedNavOption === 'convenor'}" routerLink="/convenor"><i class="fa fa-fw fa-child"></i> Convenor</a>
+	  <a *ngIf="isRefereeUser() == true" [ngClass]="{'active':appContext.selectedNavOption === 'referee'}" routerLink="/referee"><i class="fa fa-fw fa-flag"></i> Referee</a>
+	  <a *ngIf="isAdminUser() == true" [ngClass]="{'active':appContext.selectedNavOption === 'admin'}" routerLink="/admin"><i class="fa fa-fw fa-cogs"></i> Administrator</a>
+	  <div class="topnav-right">
+		<a *ngIf="isUserLoggedin() == false" [ngClass]="{'active':appContext.selectedNavOption === 'login'}" routerLink="/login"><i *ngIf="isUserLoggedin() == false" class="fa fa-fw fa-user"></i> Login</a>
+		<a *ngIf="isUserLoggedin() == false" [ngClass]="{'active':appContext.selectedNavOption === 'signup'}" routerLink="/signup"><i *ngIf="isUserLoggedin() == false" class="fa fa-fw fa-pencil-square-o"></i> Register</a>
+		<a *ngIf="isUserLoggedin() == true" [ngClass]="{'active':appContext.selectedNavOption === 'signout'}" routerLink="/signout"><i *ngIf="isUserLoggedin() == true" class="fa fa-fw fa-sign-out"></i> Logout</a>	
+	  </div>
+	</div> <!-- Navigation bar -->
+  
+    <div class="container">
+		<div *ngIf="isWaitingforServer() == true" class="loader"></div>
+    </div> <!-- /container -->	
+	
+	
+	
+	

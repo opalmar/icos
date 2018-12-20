@@ -1,0 +1,50 @@
+.uniform-xs {
+	 width: 19px;
+}
+
+.uniform-xs .shirt {
+	width: 19px;
+	height: 14px;
+}
+
+.uniform-xs .shirt .shirt-stripe1 {
+  width: 4px;
+  height: 14px;
+  float: left;
+  padding: 0px;
+}	
+
+.uniform-xs .shirt .shirt-stripe2 {
+  width: 2px;
+  height: 14px;
+  float: left;
+  padding: 0px;
+}
+
+.uniform-xs .shirt .shirt-stripe3 {
+  width: 2px;
+  height: 14px;
+  float: left;
+  padding: 0px;
+}
+
+.uniform-xs .shirt .shirt-stripe4 {
+  width: 3px;
+  height: 14px;
+  float: left;
+  padding: 0px;
+}	
+
+.uniform-xs .shirt .uniform-img {
+	position: absolute;
+	margin: 0px -19px;
+}
+
+.uniform-xs .shorts {
+	width: 19px;
+	height: 7px;	
+}
+
+.uniform-xs .shorts .uniform-img {
+	display: block;
+}		
